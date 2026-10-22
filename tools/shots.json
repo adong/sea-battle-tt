@@ -1,0 +1,4 @@
+[
+  { "label": "prefs", "js": "localStorage.setItem('claudeGames.muted', '1'); localStorage.removeItem('claudeGames.lang'); localStorage.setItem('seaBattleTT.v1', JSON.stringify({ size: 10 })); location.reload(); 'reload'", "wait": 4000 },
+  { "label": "title", "js": "game.hold(true); var g = game.G.demo.g; for (var i = 0; i < 400 && g.moves < 24 && !g.over; i++) game.step(0.25); game.step(0.5); 'demo shots ' + g.moves", "wait": 700, "shot": "screenshot" }
+]

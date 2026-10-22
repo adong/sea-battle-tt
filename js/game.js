@@ -102,19 +102,20 @@
     SEA.fx.overlay.resize();
     const Wd = ST.W, Ht = ST.H;
     if (Wd < 2 || Ht < 2) return;
-    const wide = Wd / Ht >= 1.15;
-    spots = ST.layout(wide, G.focus, snap || G.state === 'home' || !spots || spots.wide !== wide);
+    const wideScreen = Wd / Ht >= 1.15, home = G.state === 'home';
+    // on the menu the seas only get the space beside it (or above it): arrange them for that shape
+    const wide = home ? (wideScreen ? (Wd * 0.44 - 72) / (Ht - 28) : (Wd - 76) / (Ht * 0.36 - 14)) >= 0.9 : wideScreen;
+    spots = ST.layout(wide, G.focus, snap || home || !spots || spots.wide !== wide);
     const V = THREE.Vector3, pts = [];
     ST.corners(0, pts);
     ST.corners(1, pts);
-    const home = G.state === 'home';
     const people = spots.owners.concat(home ? [] : [spots.buddy].concat(G.players === 1 ? [spots.extra] : []));
     for (const s of people) pts.push(new V(s.x - 0.55, 0, s.z), new V(s.x + 0.55, 0, s.z), new V(s.x, 2.9, s.z));
     // the kit's round ? and language buttons sit on the left edge: keep the seas and the boys clear of them
     const m = { l: 62, r: 14, t: 14, b: 14 };
-    if (!wide && !home) m.l = m.r = 8; // in a game on a tall screen they're down in the bottom left corner
+    if (!wideScreen && !home) m.l = m.r = 8; // in a game on a tall screen they're down in the bottom left corner
     if (home) {
-      if (wide) m.r = Wd * 0.56 + 10;
+      if (wideScreen) m.r = Wd * 0.56 + 10;
       else {
         m.b = Ht * 0.64 + 6;
         m.t = 8;
@@ -128,7 +129,7 @@
         m.r = Wd - mid.left + 6;
         m.l = 66;
       }
-      if (!wide) m.b = Math.min(Ht * 0.12, 112);
+      if (!wideScreen) m.b = Math.min(Ht * 0.12, 112);
       else if (G.state === 'hide') m.b = ui.hidebar.getBoundingClientRect().height + 20;
     }
     ST.fit(pts, wide ? 1.0 : 1.25, m);
@@ -137,6 +138,7 @@
       s.actor.faceDefault = sp.face;
       if (!SEA.highFive.on) s.actor.place(sp.x, sp.y, sp.z);
     });
+    ST.spareRafts(!home && G.players === 1, !home && G.players === 1);
     froggy.faceDefault = spots.extra.face;
     froggy.place(spots.extra.x, spots.extra.y, spots.extra.z);
   }
@@ -242,6 +244,7 @@
     G.state = 'pass';
     G.pass = { then, side };
     G.viewer = -1;
+    G.focus = then === 'hide' ? side : 1 - side; // the seas move to their new places behind the screen
     document.body.dataset.screen = 'pass';
     applyView();
     ST.target(-1);
@@ -254,7 +257,7 @@
     show(ui.pass, true);
     SEA.sfx.bell();
     updateTurnText();
-    layout();
+    layout(true);
   }
 
   function passReady() {
@@ -685,7 +688,8 @@
     if (!aiming()) return;
     const n = G.size;
     let c = G.cursor;
-    if (c < 0) c = ((n / 2) | 0) * n + ((n / 2) | 0) - (n % 2 ? 0 : 1);
+    const tip = ST.hintAt;
+    if (c < 0) c = tip.side === targetSide() && tip.cell >= 0 ? tip.cell : ((n / 2) | 0) * n + ((n / 2) | 0) - (n % 2 ? 0 : 1);
     else {
       const col = Math.min(n - 1, Math.max(0, (c % n) + dx)), row = Math.min(n - 1, Math.max(0, Math.floor(c / n) + dy));
       c = row * n + col;

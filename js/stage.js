@@ -643,6 +643,7 @@
   // ---------------------------------------------------------------- layout
 
   const SMALL = 0.55; // the sea that isn't being shot at (or hidden in) shrinks to this
+  let lastFront = -1; // which sea was in front on a tall screen (-1: a wide one)
 
   // Where the trays, rafts, cannons and people go. focus: the sea that's big (the one being shot at, or the one
   // whose ships are being hidden); the other one shrinks. -1: both big (the menu).
@@ -655,6 +656,8 @@
     const gap = wide ? GAP.wide : focus < 0 ? GAP.tall : 0.8;
     // tall: the big sea in front (nearest your thumbs), the small one behind it; on the menu side 0's in front
     const front = focus < 0 ? 0 : focus, back = 1 - front;
+    if (!wide && front !== lastFront) snap = true; // the seas trade places: gliding would slide one through the other
+    lastFront = wide ? -1 : front;
     const centres = [];
     if (wide) centres.push([-(hw[0] + gap / 2), 0], [hw[1] + gap / 2, 0]);
     else {
@@ -1074,12 +1077,18 @@
     return out;
   }
 
+  // the spare rafts: your brother's (where he pops in) and Froggy's
+  function spareRafts(buddyOn, extraOn) {
+    rafts[2].visible = buddyOn;
+    rafts[3].visible = extraOn;
+  }
+
   function render() {
     if (renderer) renderer.render(scene, cam);
   }
 
   SEA.stage = {
-    init, resize, render, update, fit, pick, toScreen, cellPos, setSize, setLook, setFleet, showShips, previewShip, settleShip,
+    init, resize, render, update, fit, pick, spareRafts, toScreen, cellPos, setSize, setLook, setFleet, showShips, previewShip, settleShip,
     drawStrip, sink, mark, clearMarks, shoot, splash, bonk, ringAt, cursor, hint, target, layout, corners, stepPx,
     scene, cam, SPAN, OUT, DOCK_Y, WATER_Y,
     busy: () => balls.length > 0,
