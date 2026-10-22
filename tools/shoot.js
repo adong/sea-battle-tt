@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 /* Screenshots with headless Chrome over the DevTools protocol (node 22's built-in WebSocket, no npm).
    node tools/shoot.js [steps.json] [outdir] [width height mobile]
-   Defaults: tools/shots.json, docs/, 1280 x 800. Serve ~/claude-games first (the preview server on port 8776), or set
+   Defaults: tools/shots.json, docs/, 1280 x 800. Serve ~/claude-games first (the preview server on port 8826), or set
    URL=... Each step may have js (run in the page, using the window.game hooks), wait (ms) and shot (file name).
-   From Snow TT Bros. docs/screenshot.jpg: node tools/shoot.js tools/shots.json docs 1200 750 */
+   From Snow TT Bros. docs/screenshot.jpg: node tools/shoot.js tools/shots.json docs 1200 750
+   Without a server: URL=file://$PWD/index.html node tools/shoot.js ... */
 'use strict';
 const { spawn } = require('child_process');
 const fs = require('fs');
@@ -14,7 +15,7 @@ const [stepsFile = path.join(__dirname, 'shots.json'), outDir = path.join(dir, '
 const steps = JSON.parse(fs.readFileSync(stepsFile, 'utf8'));
 fs.mkdirSync(outDir, { recursive: true });
 const port = 9400 + Math.floor(Math.random() * 400);
-const prof = fs.mkdtempSync(path.join(require('os').tmpdir(), 'gomokutt-chrome-'));
+const prof = fs.mkdtempSync(path.join(require('os').tmpdir(), 'seabattlett-chrome-'));
 const chrome = spawn('/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', [
   '--headless=new', `--remote-debugging-port=${port}`, `--user-data-dir=${prof}`, `--window-size=${W},${H}`,
   '--no-first-run', '--no-default-browser-check', '--enable-unsafe-swiftshader', '--use-angle=swiftshader', '--hide-scrollbars', 'about:blank',
@@ -44,7 +45,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     await send('Page.enable');
     await send('Emulation.setDeviceMetricsOverride', { width: +W, height: +H, deviceScaleFactor: 1, mobile: mobile === '1' });
     if (mobile === '1') await send('Emulation.setTouchEmulationEnabled', { enabled: true, maxTouchPoints: 5 });
-    await send('Page.navigate', { url: process.env.URL || 'http://localhost:8776/gomoku-tt/' });
+    await send('Page.navigate', { url: process.env.URL || 'http://localhost:8826/sea-battle-tt/' });
     await sleep(4000);
     for (const s of steps) {
       if (s.size) await send('Emulation.setDeviceMetricsOverride', { width: s.size[0], height: s.size[1], deviceScaleFactor: 1, mobile: false });

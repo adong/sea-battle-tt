@@ -1,4 +1,4 @@
-/* TT Gomoku: a character beside the board, from Tommy's Toy Box. GMK.makeActor() wraps a Kit.people person:
+/* TT Sea Battle: a character beside the board, from Tommy's Toy Box. SEA.makeActor() wraps a Kit.people person:
      - stand somewhere, run to a spot (moveTo), face the camera or a direction (face)
      - reactions: hop, cheer, oops, hello / goodbye / signature (Tommy's Y with ✌️, Teddy's boxing with 💥 and his
        jump shot with a 🏀; everyone else waves), over (keep celebrating), shrug (a silly "oh well" for a loss)
@@ -9,7 +9,7 @@
 (function () {
   'use strict';
   const T = THREE;
-  const GMK = (window.GMK = window.GMK || {});
+  const SEA = (window.SEA = window.SEA || {});
   const { rand, emojiTexture, radialTexture } = Kit.gfx;
 
   const DUR = { cheer: 0.7, signature: 1.8, oops: 0.9, hello: 1.8, shrug: 1.6 };
@@ -278,7 +278,7 @@
         if (beat !== st.beat) {
           st.beat = beat;
           if (beat === 0 || beat === 2) {
-            GMK.sfx.kit('punch');
+            SEA.sfx.kit('punch');
             Kit.people.handWorld(p, beat === 0 ? -1 : 1, tmp);
             fwd(tmp2, 0.35 * s);
             flyers.add('💥', tmp.x + tmp2.x, tmp.y, tmp.z + tmp2.z, rand(-0.4, 0.4), rand(0.4, 1), 0.6 * s, 0.45, 0, 0);
@@ -372,7 +372,7 @@
         if (u >= 1) {
           ball.visible = false;
           st.ballT = -1;
-          GMK.sfx.kit('swish');
+          SEA.sfx.kit('swish');
           for (let i = 0; i < 6; i++) flyers.add('⭐', ballTo.x, ballTo.y, ballTo.z, rand(-1.5, 1.5), rand(0.5, 2.5), 0.35 * s, 0.7, rand(-3, 3), 4);
         }
       }
@@ -403,5 +403,5 @@
     };
   }
 
-  GMK.makeActor = makeActor;
+  SEA.makeActor = makeActor;
 })();

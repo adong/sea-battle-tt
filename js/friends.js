@@ -1,7 +1,8 @@
-/* TT Bowling: the CPU friends, 🦊 Foxy and 🐸 Froggy. The kit has no animals but the bear, so this game adds two
-   roster entries built on the kit's bear head: Foxy (from TT Chess) with pointy dark-tipped ears, a white chin and a
-   bushy tail; Froggy all green with big eyes on top and a wide smile. Kit.people.build is wrapped so anything with
-   look.fox or look.frog gets them, the menu portraits too. Move this into the kit if more games want them. */
+/* TT Sea Battle: the CPU friends, 🦊 Foxy and 🐸 Froggy (from TT Bowling). The kit has no animals but the bear, so
+   this game adds two roster entries built on the kit's bear head: Foxy (from TT Chess) with pointy dark-tipped ears,
+   a white chin and a bushy tail; Froggy all green with big eyes on top and a wide smile. Kit.people.build is wrapped
+   so anything with look.fox or look.frog gets them, the menu portraits too. Foxy is the captain you play against;
+   Froggy is her lookout, on her raft. Move this into the kit if more games want them. */
 (function () {
   'use strict';
   const T = THREE;

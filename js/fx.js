@@ -1,11 +1,11 @@
-/* TT Gomoku: effects, from Tommy's Toy Box.
-   GMK.fx.flyers(scene): emoji sprites that fly, spin and fade in a 3D scene (stars, 💥, ✌️, treats).
-   GMK.fx.bursts(scene): comic "NICE!" / "BLOCKED!" starbursts that pop and fade.
-   GMK.fx.overlay: confetti and emoji on the 2D canvas over the page, in screen pixels (confetti for a win). */
+/* TT Sea Battle: effects, from Tommy's Toy Box.
+   SEA.fx.flyers(scene): emoji sprites that fly, spin and fade in a 3D scene (stars, 💥, ✌️, treats).
+   SEA.fx.bursts(scene): comic "NICE!" / "BLOCKED!" starbursts that pop and fade.
+   SEA.fx.overlay: confetti and emoji on the 2D canvas over the page, in screen pixels (confetti for a win). */
 (function () {
   'use strict';
   const T = THREE;
-  const GMK = (window.GMK = window.GMK || {});
+  const SEA = (window.SEA = window.SEA || {});
   const { makeCanvas, toTexture, emojiTexture, rand, pick, FONT } = Kit.gfx;
 
   // ---------------------------------------------------------------- 3D emoji flyers
@@ -215,5 +215,5 @@
     return { init, resize, burst, rain, update, clear, get count() { return parts.length; } };
   })();
 
-  GMK.fx = { flyers, bursts, burstTexture, overlay };
+  SEA.fx = { flyers, bursts, burstTexture, overlay };
 })();
